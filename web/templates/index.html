@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperDataCenter</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Изменено с center на flex-start */
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Verdana, sans-serif;
+            /* Добавлено свойство background-image */
+            background-image: url('https://www.racksolutions.com/news//app/uploads/AdobeStock_87909563.jpg');
+            background-size: cover; /* Изображение будет масштабировано так, чтобы оно полностью покрывало элемент */
+            background-position: center; /* Изображение будет выровнено по центру */
+            background-repeat: no-repeat; /* Изображение не будет повторяться */
+        }
+        h1 {
+            margin-bottom: 50px;
+            color: white;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 300px;
+        }
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+            font-size: 16px;
+            margin-right: 100px;
+        }
+        .login {
+            background-color: #3EDC72;
+        }
+        .servers {
+            background-color: #E3FC10;
+        }
+        .news {
+            background-color: #EB0C0C;
+        }
+        .button:last-child {
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>SuperDataCenter</h1>
+    <div class="button-container">
+        <a href="/login" class="button login">Вход в личный кабинет</a>
+        <a href="/servers" class="button servers">Доступные сервера</a>
+        <a href="/news" class="button news">Новости</a>
+    </div>
+</body>
+</html>

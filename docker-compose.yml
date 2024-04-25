@@ -1,0 +1,22 @@
+services:
+  web:
+    container_name: data-center-web
+    build: 
+      context: ./web/
+    ports:
+      - "8000:8000"
+    environment:
+      - IP=0.0.0.0
+      - PORT=8000
+      - POSTGRES_PASSWORD=P@ssword
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+  databse:
+    hostname: postgres
+    build: 
+      context: ./db/
+    environment:
+      - POSTGRES_PASSWORD=P@ssword

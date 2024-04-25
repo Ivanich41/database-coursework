@@ -1,0 +1,3 @@
+Flask # Web framework 
+psycopg2  # Postgres operator tool
+hashlib
