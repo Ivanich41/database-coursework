@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление тикетами</title>
+    <style>
+        table {
+    width: 100%;
+    border-collapse: collapse;
+            }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .back-to-home-button {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #90ee90;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-to-home-button:hover {
+            background-color: #90ee90;
+        }
+        #sessionInfo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+    </head>
+</head>
+<body>
+    <h1>Управление тикетами</h1>
+    <h2>Активные тикеты</h2>
+    <table class="tickets-table-1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email клиента</th>
+                <th>Сервер</th>
+                <th>Статус</th>
+                <th>Название</th>
+                <th>Текст</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in opened_tickets %}
+                <tr>
+                    <td>{{ ticket[0] }}</td>
+                    <td>{{ ticket[1] }}</td>
+                    <td>{{ ticket[2] }} </td>
+                    <td>{{ ticket[5] }}</td>
+                    <td>{{ ticket[7] }}</td>
+                    <td>{{ ticket[8] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Взять тикет</h3>
+    <p>Выберите тикет из списка:</p>
+    <select id="openedTicketIDs">
+        {% for ticket_name in opened_ticket_names %}
+        <option value="{{ ticket_name[0] }}">{{ ticket_name[0] }}</option>
+        {% endfor %}
+    </select>
+    <p>Выберите уровень важности:</p>
+    <select id="severity">
+        <option value="High">Высокий</option>
+        <option value="Medium">Средний</option>
+        <option value="Low">Низкий</option>
+    </select>
+    <button id="takeTicketButton">Взять тикет</button>
+    <script>
+        document.getElementById('takeTicketButton').addEventListener('click', function(event) {
+            var openedTicketID = document.getElementById('openedTicketIDs').value;
+            var severity = document.getElementById('severity').value;
+            var newUrl = '/admin-tickets-get?openedTicketID=' + encodeURIComponent(openedTicketID) + '&severity=' +encodeURIComponent(severity);
+            window.location.href = newUrl;
+        });
+    </script>
+    <h2>Мои тикеты</h2>
+    <table class="tickets-table-2">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email клиента</th>
+                <th>Сервер</th>
+                <th>Статус</th>
+                <th>Важность</th>
+                <th>Название</th>
+                <th>Текст</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in my_tickets %}
+                <tr>
+                    <td>{{ ticket[0] }}</td>
+                    <td>{{ ticket[1] }}</td>
+                    <td>{{ ticket[2] }} </td>
+                    <td>{{ ticket[5] }}</td>
+                    <td>{{ ticket[6] }}</td>
+                    <td>{{ ticket[7] }}</td>
+                    <td>{{ ticket[8] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Закрыть тикет</h3>
+    <select id="myTicketIDs">
+        {% for ticket_name in my_tickets %}
+        <option value="{{ ticket_name[0] }}">{{ ticket_name[0] }}</option>
+        {% endfor %}
+    </select>
+    <button id="takeTicketButton2">Закрыть тикет</button>
+    <script>
+        document.getElementById('takeTicketButton2').addEventListener('click', function(event) {
+            var myTicketID = document.getElementById('myTicketIDs').value;
+            var newUrl = '/admin-tickets-close?myTicketID=' + encodeURIComponent(myTicketID)
+            window.location.href = newUrl;
+        });
+    </script>
+    {% if id_number %}
+    <div id="sessionInfo">
+        Вошёл администратор с ID: {{ id_number }}
+    {% else %}
+    <div id="sessionInfo">
+    Вы не вошли в систему.
+    </div>
+    {% endif %}
+    <div>
+        <button type="button" class="back-to-home-button">Back to admin cabinet</button>
+    </div>
+    <script>
+        document.querySelector('.back-to-home-button').addEventListener('click', function() {
+            window.location.href = '/admin-cabinet';
+        });
+    </script>
+</body>
+</html>

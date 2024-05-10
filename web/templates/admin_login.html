@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperDataCenter Login</title>
+    <title>Admin Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,29 +76,34 @@
             padding: 10px;
             border-radius: 5px;
         }
+        .cabinet-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #90ee90; 
+            color: #000; 
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .cabinet-button:hover {
+            background-color: #70db70; 
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>SuperDataCenter Login</h1>
-        <form action="/submit-login" method="post">
+        <h1>Admin login</h1>
+        <form action="/admin-login-submit" method="post">
             
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="id">Your ID:</label>
+            <input type="id" id="id" name="id" required>
             
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             
             <input type="submit" value="Login">
         </form>
-    </div>
-    <div class="container2">
-        <button type="button" id="registerButton" class="full-width-button">Register</button>
-        <script>
-        document.getElementById('registerButton').addEventListener('click', function() {
-            window.location.href = '/register';
-        });
-        </script>
     </div>
     <div>
         <button type="button" class="back-to-home-button">Back to home</button>
@@ -108,9 +113,10 @@
             window.location.href = '/';
         });
     </script>
-    {% if email %}
+    {% if id_number %}
         <div id="sessionInfo">
-        Вы вошли как: {{ email }}
+        Вошёл администратор с ID: {{ id_number }}
+        <a href="/admin-cabinet" class="cabinet-button">Личный кабинет администратора</a>
     {% else %}
         <div id="sessionInfo">
      Вы не вошли в систему.

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <style>
+        .rents-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .rents-table th, .rents-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .rents-table th {
+            background-color: #f2f2f2;
+        }
+        .support-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ffff00; /* Желтый цвет */
+            color: #000; /* Черный цвет текста */
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .support-button:hover {
+            background-color: #cccc00; /* Светлее желтый цвет при наведении */
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .back-to-home-button {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #EB0C0C;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        .back-to-home-button:hover {
+            background-color: #EB0C0C;
+        }
+        #sessionInfo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Личный кабинет</h1>
+    <h2>Активные аренды</h2>
+    <table class="rents-table">
+        <thead>
+            <tr>
+                <th>Сервер</th>
+                <th>Начало аренды</th>
+                <th>Окончание аренды</th>
+                <th>Стоимость</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rent in rents %}
+                <tr>
+                    <td>{{ rent[2] }}</td>
+                    <td>{{ rent[3] }}</td>
+                    <td>{{ rent[4] }}</td>
+                    <td>{{ rent[5] }} руб.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/support" class="support-button">Техническая поддержка</a>
+    {% if email %}
+        <div id="sessionInfo">
+        Вы вошли как: {{ email }}
+    {% else %}
+        <div id="sessionInfo">
+     Вы не вошли в систему.
+    </div>
+    {% endif %}
+</body>
+    <div>
+        <button type="button" class="back-to-home-button">Back to home</button>
+    </div>
+    <script>
+        document.querySelector('.back-to-home-button').addEventListener('click', function() {
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

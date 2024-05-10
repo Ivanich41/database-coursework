@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новости</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .back-to-home-button {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #EB0C0C;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-to-home-button:hover {
+            background-color: #EB0C0C;
+        }
+        #sessionInfo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Новости</h1>
+    <table>
+        <tr>
+            <th>Название новости</th>
+            <th>Тип новости</th>
+            <th>Дата</th>
+            <th>Содержание</th>
+        </tr>
+        {% for news in newslist %}
+        <tr>
+            <td>{{ news[1] }}</td>
+            <td>{{ news[2] }}</td>
+            <td>{{ news[3] }}</td>
+            <td>{{ news[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div>
+        <button type="button" class="back-to-home-button">Back to home</button>
+    </div>
+    <script>
+        document.querySelector('.back-to-home-button').addEventListener('click', function() {
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

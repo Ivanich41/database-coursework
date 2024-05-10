@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Написать новость</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+        }
+        input, select, textarea {
+            width: 25%; /* Устанавливаем ширину в четверть экрана */
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .back-to-home-button {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #90ee90;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-to-home-button:hover {
+            background-color: #90ee90;
+        }
+        #sessionInfo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Написать новость</h1>
+    <form action="/write-news-done" method="post">
+        <label for="news-title">Название новости:</label>
+        <input type="text" id="news-title" name="news-title" required>
+
+        <label for="news-text">Текст новости:</label>
+        <textarea id="news-text" name="news-text" rows="4" required></textarea>
+
+        <label for="news-type">Тип новости:</label>
+        <select id="news-type" name="news-type" required>
+            <option value="danger">Авария</option>
+            <option value="maintenance">Техническое обслуживание</option>
+            <option value="info">Информация</option>
+            <option value="discount">Скидка</option>
+        </select>
+
+        <button type="submit">Опубликовать</button>
+    </form>
+    <div>
+        <button type="button" class="back-to-home-button">Back to admin cabinet</button>
+    </div>
+    <script>
+        document.querySelector('.back-to-home-button').addEventListener('click', function() {
+            window.location.href = '/admin-cabinet';
+        });
+    </script>
+    {% if id_number %}
+        <div id="sessionInfo">
+        Вошёл администратор с ID: {{ id_number }}
+    {% else %}
+        <div id="sessionInfo">
+     Вы не вошли в систему.
+    </div>
+    {% endif %}
+</body>
+</html>

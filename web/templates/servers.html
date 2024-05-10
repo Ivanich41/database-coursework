@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список серверов</title>
+    <style>
+        .back-to-home-button {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #EB0C0C;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-to-home-button:hover {
+            background-color: #EB0C0C;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #sessionInfo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список серверов</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Местоположение</th>
+            <th>Ядра CPU</th>
+            <th>Ram (ГБ)</th>
+            <th>Диск(ГБ)</th>
+            <th>Статус</th>
+        </tr>
+        {% for server in servers %}
+        <tr>
+            <td>{{ server[0] }}</td>
+            <td>{{ server[1] }}</td>
+            <td>{{ server[2] }}</td>
+            <td>{{ server[3] }}</td>
+            <td>{{ server[4] }}</td>
+            <td>{{ server[5] }}</td>
+            <td>{{ 'Свободен' if not server[6] else 'Занят' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div>
+        <button type="button" class="back-to-home-button">Back to home</button>
+    </div>
+    <script>
+        document.querySelector('.back-to-home-button').addEventListener('click', function() {
+            window.location.href = '/';
+        });
+    </script>
+    {% if email %}
+    <div id="sessionInfo">
+        Вы вошли как: {{ email }}
+    </div>
+    <div id="serverSelection">
+        <select id="serverList">
+            {% for name in server_names %}
+                <option value="{{ loop.index }}">{{ name }}</option>
+             {% endfor %}
+        </select>
+        <!-- TODO: Переброска на страничку формирования покупки с ценой и названием -->
+
+        <button id="buyButton">Купить</button>
+        <script>
+            document.getElementById('buyButton').addEventListener('click', function() {
+            // Получаем элемент селектора
+            var serverList = document.getElementById('serverList');
+            // Получаем выбранный элемент <option>
+            var selectedOption = serverList.options[serverList.selectedIndex];
+            // Получаем текстовое содержимое выбранного элемента <option>
+            var selectedServerName = selectedOption.textContent;
+            // Формируем новый URL с именем выбранного сервера в качестве GET параметра
+            var newUrl = '/purchase?selectedServer=' + encodeURIComponent(selectedServerName);
+            // Перенаправляем пользователя на новую страницу
+            window.location.href = newUrl;
+});
+        </script>
+    </div>
+    {% else %}
+    <div id="sessionInfo">
+        Вы не вошли в систему.
+    </div>
+    {% endif %}
+</body>
+</html>

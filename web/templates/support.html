@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отправка тикета</title>
+    <style>
+    .tickets-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tickets-table th, .tickets-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .tickets-table th {
+            background-color: #f2f2f2;
+        }
+        .back-to-home-button {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #90ee90;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-to-home-button:hover {
+            background-color: #90ee90;
+        }
+        #sessionInfo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Активные тикеты</h1>
+    <table class="tickets-table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Сервер</th>
+                <th>Статус</th>
+                <th>Важность</th>
+                <th>Назначенный сторудник</th>
+                <th>Текст</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket[7] }}</td>
+                    <td>{{ ticket[2] }}</td>
+                    <td>{{ ticket[5] }}</td>
+                    <td>{{ ticket[6] }}</td>
+                    <td>{{ ticket[3] }} {{ ticket[4] }}</td>
+                    <td>{{ ticket[8] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br></br>
+    <h2>Новый тикет</h2>
+    <form action="/submit-ticket" method="post">
+        <label for="server_name">Выберите сервер:</label>
+        <select name="server_name" id="server_names" required>
+            {% for name in user_servers %}
+                <option value="{{ name }}">{{ name }}</option>
+             {% endfor %}
+        </select>
+        <br><br>
+        <input type="hidden" name="server_name" id="server_name">
+        <label for="ticket_name">Название тикета (максимум 50 символов):</label>
+        <input type="text" name="ticket_name" id="ticket_name" required>
+        <br><br>
+        <label for="ticket_payload">Описание проблемы (максимум 10000 символов):</label>
+        <textarea name="ticket_payload" id="ticket_payload" rows="4" cols="50" required></textarea>
+        <br><br>
+        <input type="submit" value="Отправить">
+    </form>
+    <script>
+        document.getElementById('server_name').addEventListener('submit', function(event) {
+            var serverList = document.getElementById('server_names');
+            var selectedOption = serverList.options[serverList.selectedIndex];
+            var selectedServerName = selectedOption.textContent;
+            document.getElementById('server_name').value = selectedServerName;
+        });
+    </script>
+    {% if email %}
+        <div id="sessionInfo">
+        Вы вошли как: {{ email }}
+    {% else %}
+        <div id="sessionInfo">
+     Вы не вошли в систему.
+    </div>
+    {% endif %}
+</body>
+    <div>
+        <button type="button" class="back-to-home-button">Back to cabinet</button>
+    </div>
+    <script>
+        document.querySelector('.back-to-home-button').addEventListener('click', function() {
+            window.location.href = '/cabinet';
+        });
+    </script>
+</body>
+</html>

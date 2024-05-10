@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет администратора</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Высота контейнера равна высоте видимой области */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button-yellow {
+            background-color: #eb8334; /* Желтый цвет */
+            color: black;
+        }
+        .button-blue {
+            background-color: #34e5eb; /* Голубой цвет */
+            color: black;
+        }
+        .button:hover {
+            opacity: 0.8;
+        }
+        .back-to-home-button {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #EB0C0C;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-to-home-button:hover {
+            background-color: #EB0C0C;
+        }
+        #sessionInfo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Личный кабинет администратора</h1>
+        <a href="/admin-tickets" class="button button-yellow">Тикеты техподдержки</a>
+        <a href="/write-news" class="button button-blue">Написать новость</a>
+    </div>
+    <div>
+        <button type="button" class="back-to-home-button">Back to home</button>
+    </div>
+    <script>
+        document.querySelector('.back-to-home-button').addEventListener('click', function() {
+            window.location.href = '/';
+        });
+    </script>
+    {% if id_number %}
+        <div id="sessionInfo">
+        Вошёл администратор с ID: {{ id_number }}
+    {% else %}
+        <div id="sessionInfo">
+     Вы не вошли в систему.
+    </div>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Покупка</title>
+    <style>
+        .back-to-home-button {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #EB0C0C;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .back-to-home-button:hover {
+            background-color: #EB0C0C;
+        }
+    </style>
+    <script>
+        function submitPurchase() {
+            // Получаем выбранное значение из селектора продолжительности подписки
+            var selectedDuration = document.getElementById('durationList').value;
+            
+            // Формируем новый URL с выбранным значением в качестве GET параметра
+            var newUrl = '/complete-purchase?selectedServer=' + encodeURIComponent(document.getElementById('serverName').textContent) + '&selectedDuration=' + encodeURIComponent(selectedDuration);
+            
+            // Перенаправляем пользователя на новую страницу
+            window.location.href = newUrl;
+        }
+    </script>
+</head>
+<body>
+    <h1>Покупка</h1>
+    <p>Выбранный сервер: <span id="serverName">{{ selected_server }} будет стоить {{ rental_price }} рублей в месяц. Выберите период аренды:</span></p>
+    <select id="durationList">
+        {% for duration in range(1, 13) %}
+            <option value="{{ duration }}">{{ duration }} месяц{{ "" if duration == 1 else "а" if duration in (2, 3, 4) else "ев" }}</option>
+        {% endfor %}
+    </select>
+    <button onclick="submitPurchase()">Покупка</button>
+    <div>
+        <button type="button" class="back-to-home-button">Back to home</button>
+    </div>
+    <script>
+        // функционал кнопки возврата
+        document.querySelector('.back-to-home-button').addEventListener('click', function() {
+            window.location.href = '/';
+        });
+        // переадресация на выполнение покупки 
+        function submitPurchase() {
+            var selectedDuration = document.getElementById('durationList').value;
+            var serverNameText = document.getElementById('serverName').textContent;
+            var serverName = serverNameText.split(' ')[0];
+            var newUrl = '/complete-purchase?selectedServer=' + encodeURIComponent(serverName) + '&selectedDuration=' + encodeURIComponent(selectedDuration);
+            
+            window.location.href = newUrl;
+        }
+    </script>
+</body>
+</html>

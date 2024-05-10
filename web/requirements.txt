@@ -1,3 +1,2 @@
-Flask # Web framework 
-psycopg2  # Postgres operator tool
-hashlib
+Flask
+psycopg2-binary

@@ -51,6 +51,27 @@
         .button:last-child {
             margin-right: 0;
         }
+        #sessionInfo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .cabinet-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #90ee90; 
+            color: #000; 
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .cabinet-button:hover {
+            background-color: #70db70; 
+        }
     </style>
 </head>
 <body>
@@ -60,5 +81,15 @@
         <a href="/servers" class="button servers">Доступные сервера</a>
         <a href="/news" class="button news">Новости</a>
     </div>
+    {% if email %}
+        <div id="sessionInfo">
+            Вы вошли как: {{ email }}
+            <a href="/cabinet" class="cabinet-button">Личный кабинет</a>
+    {% else %}
+    <div id="sessionInfo">
+        Вы не вошли в систему.
+    </div>
+    {% endif %}
+</div>
 </body>
 </html>
