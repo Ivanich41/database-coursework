@@ -70,7 +70,7 @@ CREATE TABLE News (
     news_data VARCHAR(10000)
 );
 CREATE TABLE audit_log (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     table_name VARCHAR(255),
     action_type VARCHAR(50),
     old_value TEXT,
@@ -108,93 +108,62 @@ VALUES ('NY-2-4-50', 'New York', 2, 4, 50, FALSE, 500);
 INSERT INTO Servers (server_name, location, cpu, ram, disk, purchased, rental_price)
 VALUES ('NY-4-8-100', 'New York', 4, 8, 100, FALSE, 1000);
 
+DROP TRIGGER IF EXISTS update_last_modified_on_status_change ON Support_tickets;
+DROP FUNCTION IF EXISTS  update_last_modified_on_status_change();
+
+DROP TRIGGER IF EXISTS prevent_short_phone_numbers ON Clients;
+DROP FUNCTION IF EXISTS  prevent_short_phone_numbers();
+
+DROP TRIGGER IF EXISTS check_user_email_uniqueness ON Clients;
+DROP FUNCTION IF EXISTS  check_user_email_uniqueness();
+
+
 -- Этот триггер обнолвяет знаечние поля last_modified при изменении значения
-DELIMITER //
-CREATE TRIGGER update_last_modified_on_status_change
-AFTER UPDATE ON Support_tickets
-FOR EACH ROW
+CREATE OR REPLACE FUNCTION update_last_modified_on_status_change()
+RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.status IS DISTINCT FROM OLD.status THEN
-        UPDATE Support_tickets SET last_modified = CURRENT_TIMESTAMP WHERE id = NEW.id;
+        UPDATE Support_tickets SET last_modified = CURRENT_TIMESTAMP WHERE ticket_id = NEW.ticket_id;
     END IF;
-END; //
-DELIMITER ;
-
--- Следующие 5 триггеров записывают информациии об изменениях в таблицах Clients, Employees, 
--- Servers, Active_rents и Support_tickets в отдельную таблицу audit_log
-CREATE TRIGGER log_client_changes
-AFTER INSERT OR UPDATE OR DELETE ON Clients
-FOR EACH ROW
-BEGIN
-    IF OLD.id IS NOT NULL THEN
-        INSERT INTO audit_log (table_name, action_type, old_value, new_value)
-        VALUES ('Clients', 'UPDATE', OLD.name, NEW.name);
-    ELSE
-        INSERT INTO audit_log (table_name, action_type, new_value)
-        VALUES ('Clients', 'INSERT', NEW.name);
-    END IF;
+    RETURN NEW;
 END;
+$$ LANGUAGE plpgsql;
 
-CREATE TRIGGER log_employee_changes
-AFTER INSERT OR UPDATE OR DELETE ON Employees
-FOR EACH ROW
-BEGIN
-    IF OLD.id IS NOT NULL THEN
-        INSERT INTO audit_log (table_name, action_type, old_value, new_value)
-        VALUES ('Employees', 'UPDATE', OLD.name, NEW.name);
-    ELSE
-        INSERT INTO audit_log (table_name, action_type, new_value)
-        VALUES ('Employees', 'INSERT', NEW.name);
-    END IF;
-END;
+CREATE TRIGGER update_last_modified_on_status_change
+AFTER UPDATE ON Support_tickets
+FOR EACH ROW EXECUTE PROCEDURE update_last_modified_on_status_change();
 
-CREATE TRIGGER log_servers_changes
-AFTER INSERT OR UPDATE OR DELETE ON Servers
-FOR EACH ROW
-BEGIN
-    IF OLD.id IS NOT NULL THEN
-        INSERT INTO audit_log (table_name, action_type, old_value, new_value)
-        VALUES ('Servers', 'UPDATE', OLD.name, NEW.name);
-    ELSE
-        INSERT INTO audit_log (table_name, action_type, new_value)
-        VALUES ('Servers', 'INSERT', NEW.name);
-    END IF;
-END;
 
-CREATE TRIGGER log_rents_changes
-AFTER INSERT OR UPDATE OR DELETE ON Active_rents
-FOR EACH ROW
+-- Этот триггер предотвращает вставку номера телефона короче 5 символов 
+CREATE OR REPLACE FUNCTION prevent_short_phone_numbers()
+RETURNS TRIGGER AS $$
 BEGIN
-    IF OLD.id IS NOT NULL THEN
-        INSERT INTO audit_log (table_name, action_type, old_value, new_value)
-        VALUES ('Active rents', 'UPDATE', OLD.name, NEW.name);
-    ELSE
-        INSERT INTO audit_log (table_name, action_type, new_value)
-        VALUES ('Active rents', 'INSERT', NEW.name);
+    IF LENGTH(NEW.phone) < 5 THEN
+        RAISE EXCEPTION 'Phone number must be at least 5 characters long.';
     END IF;
+    RETURN NEW;
 END;
+$$ LANGUAGE plpgsql;
 
-CREATE TRIGGER log_tickets_changes
-AFTER INSERT OR UPDATE OR DELETE ON Support_tickets
-FOR EACH ROW
-BEGIN
-    IF OLD.id IS NOT NULL THEN
-        INSERT INTO audit_log (table_name, action_type, old_value, new_value)
-        VALUES ('Support tickets', 'UPDATE', OLD.name, NEW.name);
-    ELSE
-        INSERT INTO audit_log (table_name, action_type, new_value)
-        VALUES ('Support tickets', 'INSERT', NEW.name);
-    END IF;
-END;
+CREATE TRIGGER prevent_short_phone_numbers
+BEFORE INSERT ON Clients
+FOR EACH ROW EXECUTE PROCEDURE prevent_short_phone_numbers();
+
 
 -- Этот триггер предотвращает создание пользователей с одинаковыми имейлами 
-CREATE TRIGGER check_user_email_uniqueness
-BEFORE INSERT ON Clients
-FOR EACH ROW
+CREATE OR REPLACE FUNCTION check_user_email_uniqueness()
+RETURNS TRIGGER AS $$
+DECLARE
+    email_exists BOOLEAN;
 BEGIN
-    DECLARE email_exists BOOLEAN;
     SELECT EXISTS(SELECT 1 FROM Clients WHERE email = NEW.email) INTO email_exists;
     IF email_exists THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email must be unique.';
+        RAISE EXCEPTION 'Email must be unique.';
     END IF;
+    RETURN NEW;
 END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_user_email_uniqueness
+BEFORE INSERT ON Clients
+FOR EACH ROW EXECUTE PROCEDURE check_user_email_uniqueness();
