@@ -69,14 +69,6 @@ CREATE TABLE News (
     news_date DATE NOT NULL,
     news_data VARCHAR(10000)
 );
-CREATE TABLE audit_log (
-    id SERIAL PRIMARY KEY,
-    table_name VARCHAR(255),
-    action_type VARCHAR(50),
-    old_value TEXT,
-    new_value TEXT,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 
 -- Эта функция очищает таблицы  Active_Rents, Support_tickets и News и делает достуными для покупки все сервера
