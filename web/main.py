@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 # DB_PORT = "54320"
 
 DB_NAME = "datacenter"
-DB_HOST = "postgres"
+DB_HOST = "192.168.2.31"
 DB_USER = "postgres"
 DB_PASSWORD = os.environ["POSTGRES_PASSWORD"]
 DB_PORT = "5432"
