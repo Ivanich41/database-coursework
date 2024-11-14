@@ -1,0 +1,28 @@
+services:
+  web:
+    container_name: data-center-web
+    build: 
+      context: ./web/
+    ports:
+      - "5000:5000"
+    environment:
+      - POSTGRES_PASSWORD=P@ssword
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+  # database:
+  #   container_name: data-center-db
+  #   build: 
+  #     context: ./db/
+  #   hostname: postgres
+  #   environment:
+  #     - POSTGRES_PASSWORD=P@ssword
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_DB=datacenter
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
