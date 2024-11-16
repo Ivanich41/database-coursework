@@ -2,6 +2,7 @@
 -- CREATE DATABASE datacenter ;
 -- \c datacenter
 
+SELECT pg_create_physical_replication_slot('replication_slot');
 -- Удалем старые таблицы
 DROP TABLE IF EXISTS Clients;
 DROP TABLE IF EXISTS Employees;

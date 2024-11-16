@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - POSTGRES_PASSWORD=P@ssword
+      - POSTGRES_PASSWORD=P@ssw0rd
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000"]
       interval: 1m30s
