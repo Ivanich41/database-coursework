@@ -3,6 +3,7 @@ import hashlib
 import psycopg2
 import os
 import secrets
+import socket
 from datetime import datetime, timedelta
 
 # Локлаьное тестирование 
@@ -71,12 +72,13 @@ def root():
     # Поиск куки в заголовках
     session_id = request.cookies.get('session_id', None)
     email = find_email_by_session_id(session_id,sessions)
-    
+    hostname = socket.gethostname() 
+
     if session_id:
         print("Cookie found!")
     else:
         print("No cookie")
-    return render_template("index.html", email=email )
+    return render_template("index.html", email=email, hostname=hostname )
 
 
 @app.route('/login', methods=['GET'])

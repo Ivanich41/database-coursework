@@ -72,6 +72,17 @@
         .cabinet-button:hover {
             background-color: #70db70; 
         }
+        #serverInfo {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%); /* Центрируем элемент по горизонтали */
+        background-color: rgba(255, 255, 255, 0.8); /* Светлый фон с прозрачностью */
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    }
     </style>
 </head>
 <body>
@@ -90,6 +101,9 @@
         Вы не вошли в систему.
     </div>
     {% endif %}
+    <div id="serverInfo">
+        <p>Вы подключены к серверу: {{ hostname }}</p>
+    </div>
 </div>
 </body>
 </html>
